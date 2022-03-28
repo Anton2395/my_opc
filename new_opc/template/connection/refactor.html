@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Connection view</title>
+    </head>
+    <body>
+        <div>
+            <form method="POST" action="">
+                <ul>
+                    <li>
+                        <nobr>Name:<input name="name" type="text" value="{{ connect.name }}"></nobr>
+                    </li>
+                    <li>
+                        <nobr>driver:<input name="driver" type="text" value="{{ connect.driver }}"></nobr>
+                    </li>
+                    <li>
+                        <nobr>ip:<input name="ip" type="text" value="{{ connect.ip_addres }}"></nobr>
+                    </li>
+                    <li>
+                        <nobr>port:<input name="port" type="text" value="{{ connect.port }}"></nobr>
+                    </li>
+                    <li>
+                        <nobr>rack:<input name="rack" type="text" value="{{ connect.rack }}"></nobr>
+                    </li>
+                    <li>
+                        <nobr>slot:<input name="slot" type="text" value="{{ connect.slot }}"></nobr>
+                    </li>
+                </ul>
+                <button>Change</button>
+            </form>
+        </div>
+    </body>
+</html>

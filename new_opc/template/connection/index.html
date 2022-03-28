@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Connections</title>
+        <script   src="/js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        {% for connect in connections %}
+        <div id="area" class="connect_area">
+            <div class="param_text">
+                <p>{{connect.name}}</p>
+                <ul>
+                    <li>driver: {{connect.driver}}</li>
+                    <li>ip_addres: {{connect.ip_addres}}</li>
+                    <li>port: {{connect.port}}</li>
+                    <li>rack: {{connect.rack}}</li>
+                    <li>slot: {{connect.slot}}</li>
+                    <li id="status_{{connect.name}}">status: 0</li>
+                </ul>
+            </div>
+            <div class="batton_area">
+                <button>on/off</button>
+                <button onclick="window.location.href = ''"">valume</button>
+                <button onclick="window.location.href = '{{connect.id}}'"">Change</button>
+                <button id="button_delete_{{connect.name}}">delete</button>
+            </div>
+        </div>
+        {% endfor %}
+    </body>
+    <script>
+        let data1;
+        
+        {% for connect in connections %}
+        
+        button_delete_{{connect.name}}.onclick = function() {
+            alert("{{connect.name}}")
+        }
+
+        {% endfor %}
+
+        async function getStatus() {
+            $.get('/status/', function(data){
+                data.forEach(item => {
+                    document.getElementById("status_"+item.name).innerHTML = "status: " + String(Number(item.connect));
+                });     
+        });
+        }
+        setTimeout(function run() {
+            getStatus();
+            setTimeout(run, 3000);
+        }, 3000);
+    </script>
+</html>

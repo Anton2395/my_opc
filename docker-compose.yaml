@@ -1,0 +1,47 @@
+---
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres_container1
+    image: postgres
+    # restart: always
+    environment:
+      POSTGRES_USER: mvlab
+      POSTGRES_PASSWORD: z1x2c3
+      POSTGRES_DB: db1
+      PGDATA: /data/postgres
+      TZ: Europe/Minsk
+    volumes:
+      - postgres:/data/postgres
+      #  - ./volume/DB/:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      mvlab_network:
+        ipv4_address: 10.0.1.2
+  
+  opc:
+    container_name: opc_server
+    build: ./new_opc
+    command: python app.py
+    depends_on:
+      - postgres
+    volumes:
+      - ./new_opc:/code
+    ports:
+      - 8000:8000
+    networks:
+       mvlab_network:
+        ipv4_address: 10.0.1.3
+
+networks:
+  mvlab_network:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+
+volumes:
+  postgres:

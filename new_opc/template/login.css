@@ -1,0 +1,108 @@
+body {
+    background-color: #66578E;
+    width: 99%;
+    height: 99%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+
+}
+#space-all {
+    background-color: #66578E;
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+#name-area {
+    color: rgb(13, 27, 42);
+    background-color: #66578E;
+    margin-top: 10%;
+    margin-bottom: 1%;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Noto Sans", Noto, sans-serif;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 10px;
+    transition: text-shadow .3s;
+}
+#name-area:hover {
+    animation-duration: 1s;
+    animation-name: shadow_NAME;
+    text-shadow: 1px 1px 1px rgb(5, 3, 3);
+}
+
+#input-area {
+    margin: 5%;
+    margin-top: 10%;
+    margin-bottom: 1%;
+    padding: 3%;
+}
+.input-param {
+    background-color: #9e92be;
+    color: rgb(13, 27, 42);
+    width: 100%;
+    margin-bottom: 5%;
+    padding: 5px;
+    height: 30px;
+    text-align: center;
+    border-radius: 9px;
+    font-size: 20px;
+    font-family: "Noto Sans", Noto, sans-serif;
+    animation-name: shadow_input;
+    transition: box-shadow .3s;
+    border-color: black;
+}
+
+.input-param:active {
+    border-color: black;
+}
+
+.input-param:hover {
+    box-shadow: 1px 2px 10px black;
+}
+
+#button-area {
+    color: rgb(13, 27, 42);
+    background-color: #66578E;
+    margin-top: 0%;
+    padding: 0px;
+    text-align: center;
+    font-size: 60px;
+    font-weight: 400;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 10px;
+}
+
+#sing-in-button {
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: black;
+    margin: 0px;
+    padding: 0px;
+    background-color: #3e394d;
+    color: rgb(203, 209, 214);
+    width: 120px;
+    height: 50px;
+    font-size: 25px;
+    transition: box-shadow .3s;
+}
+#sing-in-button:hover {
+    box-shadow: 1px 2px 10px black;
+}
+#sing-in-button:active {
+    background-color: rgb(22, 51, 82);
+    color: white;
+}
