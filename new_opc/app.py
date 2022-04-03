@@ -11,7 +11,7 @@ from connection import services as _service_connection
 process_connect = {}
 process_status = {}
 
-app = Flask('opc_service', static_url_path='',
+app = Flask('opc_service', static_url_path='/static',
             static_folder='static', template_folder='template')
 
 # add router file

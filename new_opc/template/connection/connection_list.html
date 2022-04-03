@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>List connection</title>
+    <link rel="stylesheet" href="/static/css/connection.css">
+    <link rel="preconnect" href="/static/font">
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/connection_list.js"></script>
+</head>
+
+<body>
+    <div class="area-connections">
+        {% for connection in data.connections %}
+        <div id="connections{{connection.id}}" class="connections">
+            <div class="name-connection-area">
+                <div class="name-connection">
+                    <p id="name{{connection.id}}" class="value-pole">{{connection.name}}</p>
+                </div>
+                <div id="status{{connection.id}}" class="status-area"></div>
+            </div>
+            <div class="parametr-area">
+                <table class="table-param">
+                    <tr class="line-param">
+                        <td class="name-pole">IP: </td>
+                        <td class="value-pole" id="ip{{connection.id}}">{{connection.ip}}</td>
+                    </tr>
+                    <tr class="line-param">
+                        <td class="name-pole">port: </td>
+                        <td class="value-pole" id="port{{connection.id}}">{{connection.port}}</td>
+                    </tr>
+                    <tr class="line-param">
+                        <td class="name-pole">Driver: </td>
+                        <td class="value-pole" id="driver{{connection.id}}">{{connection.driver}}</td>
+                    </tr>
+                    <tr class="line-param">
+                        <td class="name-pole">Slot: </td>
+                        <td class="value-pole" id="slot{{connection.id}}">{{connection.slot}}</td>
+                    </tr>
+                    <tr class="line-param">
+                        <td class="name-pole">Rack: </td>
+                        <td class="value-pole" id="rack{{connection.id}}">{{connection.rack}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="button-area" id="button-area{{connection.id}}">
+                <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}">
+                <label for="toggle">
+                    <button class="button-change" id="change{{connection.id}}">Change param</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+<script>
+    let last_id = {{ data.last_id }}
+    create_button_add()
+
+    $('.button-change').each(function (index, elem) {
+        $("#" + this.id).click(function () {
+            change_to_form_and_back(this.id.substr(6))
+            console.log(this.id)
+        });
+    });
+    $('.switcher').each(function (index, elem) {
+        $("#switcher-run" + this.id.substr(12)).click(function () {
+            switcher_background(this.id.substr(12), this)
+        });
+    });
+
+</script>
+
+</html>

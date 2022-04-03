@@ -24,7 +24,13 @@ services:
   opc:
     container_name: opc_server
     build: ./new_opc
-    command: python app.py
+    command:
+      bash -c
+      "
+      alembic revision --autogenerate &&
+      alembic upgrade head &&
+      python app.py
+      "
     depends_on:
       - postgres
     volumes:

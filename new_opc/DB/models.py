@@ -1,5 +1,4 @@
 from contextlib import contextmanager
-from email.policy import default
 
 from sqlalchemy import Float, create_engine, delete
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Float
@@ -24,12 +23,13 @@ class ConnectionList(base):
     """
     __tablename__ = 'connectionlist'
     id = Column(Integer, primary_key=True, unique=True, index=True)
-    name = Column(String(30), nullable=False, default='No name')#добавить парамитр уникальности
+    name = Column(String(30), nullable=False, unique=True, default='No name')
     driver = Column(String(20), nullable=False)
     ip_addres = Column(String(15), nullable=False)
     port = Column(Integer, nullable=False)
     slot = Column(Integer, nullable=False)
     rack = Column(Integer, nullable=False)
+    switchr = Column(Boolean, nullable=False, default=False)
     area = relationship('Area', cascade="all, delete")
     matharea = relationship('MathArea', cascade="all, delete")
  
@@ -77,7 +77,6 @@ class ValueList(base):
     bit = Column(Integer, nullable=True)
 
 
-metadata = MetaData(bind=engine)
 
 base.metadata.create_all(engine)
 
