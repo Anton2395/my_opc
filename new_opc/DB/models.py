@@ -4,7 +4,6 @@ from sqlalchemy import Float, create_engine, delete
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy.schema import MetaData
 
 engine = create_engine('postgresql+psycopg2://mvlab:z1x2c3@10.0.1.2:5432/postgres')
 base = declarative_base()
