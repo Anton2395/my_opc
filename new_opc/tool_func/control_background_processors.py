@@ -98,7 +98,6 @@ def start_all_process(all_work_process: dict) -> bool:
         for connect in _generator_db.create_all_param():
             if connect["driver"] == "snap7":
                 all_work_process[connect["name"]] = {}
-                
                 all_work_process[connect["name"]]["status"] = _mp.Value(c_bool, False)
                 all_work_process[connect["name"]]["process"] = _processor.ConnectSnapProcess(
                     name_connect=connect["name"],
@@ -109,13 +108,13 @@ def start_all_process(all_work_process: dict) -> bool:
                     values=connect["area"],
                     status=all_work_process[connect["name"]]["status"]
                 )
-
             all_work_process[connect["name"]]["process"].start()
         print("start all process - done")
-        all_work_process["test"].terminate()
         return True
     except Exception as e:
+        print("_______________________________________")
         print(e)
+        print("_______________________________________")
         print("start all process - error")
         return False
 
