@@ -14,7 +14,7 @@ from core.DB_connect import createConnection
 
 class ConnectSnapProcess(Process):
 
-    def __init__(self, name_connect:str, ip:str, port:int, slot:int, rack:int, values:list, status:object):
+    def __init__(self, name_connect:str, ip:str, port:int, slot:int, rack:int, status:object, values:list=[]):
         """Класс процесса для подключения к ПЛК по адресу address, с портом port (по умолчанию 102) и получения заданных
         значений из блока данных db в промежутке с start_address_db по start_address_db+offset_db
         (offset_db - количество забираемых byte из блока). После получения данных разбирает bytearray по
@@ -46,7 +46,10 @@ class ConnectSnapProcess(Process):
         self.client = snap7.client.Client()
         self.client.set_connection_type(3)
         try:
+            # print(self.ip, self.rack, self.slot, self.port)
             self.client.connect(self.ip, self.rack, self.slot, tcpport=self.port)
+            print("Connect to PLC DONE")
+            self.status.value = True
         except:
             print("Error connect to PLC")
         super(ConnectSnapProcess, self).__init__()
@@ -191,6 +194,7 @@ class ConnectSnapProcess(Process):
                     for thread in threads:
                         thread.join()
                     self._conn.commit()
+            
                     
             except:
                 self.status.value = False

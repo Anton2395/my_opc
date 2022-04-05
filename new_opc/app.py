@@ -63,8 +63,16 @@ def stop_process(name_process: str) -> str:
         return "Process stop ERROR"
 
 
+@app.route('/start/<name_process>', methods=['POST'])
+def start_process(name_process: str) -> str:
+    if _service_process.start_process(all_work_process=process_connect, name_started_process=name_process):
+        return "Process start DONE"
+    else:
+        return "Process start ERROR"
+
+
 @app.route("/status/", methods=["GET"])
-def get_status() -> dict:
+def get_all_status() -> dict:
     response = []
     for name_process in process_connect:
         response.append({
@@ -72,6 +80,14 @@ def get_status() -> dict:
             "process": process_connect[name_process]["process"].is_alive(),
             "connect": process_connect[name_process]["status"].value
         })
+    return jsonify(response)
+
+@app.route("/status/<name_process>", methods=["GET"])
+def get_status(name_process: str) -> dict:
+    response = {
+        "process": process_connect[name_process]["process"].is_alive(),
+        "connect": process_connect[name_process]["status"].value
+    }
     return jsonify(response)
 
 

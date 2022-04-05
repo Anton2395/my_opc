@@ -63,9 +63,8 @@ def start_process(all_work_process: dict, name_started_process: str) -> bool:
     - **name_started_process** : имя запускаемого процесса
     """
     try:
-        while all_work_process[name_started_process]["process"].is_alive():
-            all_work_process[name_started_process]["process"].start()
-            _time.sleep(1)
+        all_work_process[name_started_process]["process"].start()
+        _time.sleep(1)
         return True
     except:
         return False
@@ -79,8 +78,14 @@ def stop_process(all_work_process: dict, name_stop_process: str) -> bool:
     - **name_stop_process** : имя останавливаемого процесса
     """
     try:
+        print("trye")
+        i = 1
         while all_work_process[name_stop_process]["process"].is_alive():
+            print(i)
+            print(all_work_process[name_stop_process]["process"].is_alive())
+            i += 1
             all_work_process[name_stop_process]["process"].terminate()
+            all_work_process[name_stop_process]["process"].join()
             _time.sleep(1)
         return True
     except:
@@ -93,30 +98,31 @@ def start_all_process(all_work_process: dict) -> bool:
 
     - **all_work_process** : словарь со всеми добавленными в работу процессами
     """
-    try:
-        print("start all process - load")
-        for connect in _generator_db.create_all_param():
-            if connect["driver"] == "snap7":
-                all_work_process[connect["name"]] = {}
-                all_work_process[connect["name"]]["status"] = _mp.Value(c_bool, False)
-                all_work_process[connect["name"]]["process"] = _processor.ConnectSnapProcess(
-                    name_connect=connect["name"],
-                    ip=connect["ip"],
-                    port=connect["port"],
-                    slot=connect["slot"],
-                    rack=connect["rack"],
-                    values=connect["area"],
-                    status=all_work_process[connect["name"]]["status"]
-                )
-            all_work_process[connect["name"]]["process"].start()
-        print("start all process - done")
-        return True
-    except Exception as e:
-        print("_______________________________________")
-        print(e)
-        print("_______________________________________")
-        print("start all process - error")
-        return False
+    # try:
+    print("start all process - load")
+    for connect in _generator_db.create_all_param():
+        if connect["driver"] == "Snap7":
+            all_work_process[connect["name"]] = {}
+            all_work_process[connect["name"]]["status"] = _mp.Value(c_bool, False)
+            all_work_process[connect["name"]]["process"] = _processor.ConnectSnapProcess(
+                name_connect=connect["name"],
+                ip=connect["ip"],
+                port=connect["port"],
+                slot=connect["slot"],
+                rack=connect["rack"],
+                values=connect["area"],
+                status=all_work_process[connect["name"]]["status"]
+            )
+            if connect["switchr"]:
+                all_work_process[connect["name"]]["process"].start()
+    print("start all process - done")
+    return True
+    # except Exception as e:
+    #     print("_______________________________________")
+    #     print(e)
+    #     print("_______________________________________")
+    #     print("start all process - error")
+    #     return False
 
 
 def start_flask(app_flask: object) -> bool:

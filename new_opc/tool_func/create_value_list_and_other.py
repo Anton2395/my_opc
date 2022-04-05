@@ -56,6 +56,7 @@ def create_connection_param(query_connect) -> dict:
         "port": query_connect.port,
         "slot": query_connect.slot,
         "rack": query_connect.rack,
+        "switchr": query_connect.switchr,
         "matharea": create_list_math_value(query_connect.matharea),
         "area": create_list_value(query_connect.area)
     }

@@ -1,4 +1,5 @@
 let status_connections_area = {}
+let timer_list = {}
 
 function create_button_add(id) {
     $('.area-connections').append(`
@@ -105,7 +106,11 @@ function change_method_front_save(id) {
 function switcher_background(id, object) {
     if ($(object).is(':checked')) {
         $('#connections' + id).css("background-color", "#7AA899")
+        start_process(id)
+        start_check_status_process(id)
     } else {
+        stop_check_status_process(id)
+        stop_process(id)
         $('#connections' + id).css("background-color", "#6E6C78")
     }
 };
@@ -149,3 +154,32 @@ function ChangeInputToText(connection) {
     $('#slot' + connection.id).html(connection.slot)
 };
 
+
+function start_check_status_process(id) {
+    timer_list[id] = setTimeout(function run() {
+        getStatus($('#name'+id).html(), id);
+        timer_list[id] = setTimeout(run, 3000);
+    }, 3000);
+};
+
+function stop_check_status_process(id) {
+    clearTimeout(timer_list[id])
+};
+
+function start_process(id) {
+    $.post('/start/' + $('#name'+id).html())
+};
+
+function stop_process(id) {
+    $.post('/stop/' + $('#name'+id).html())
+};
+
+function getStatus(name_connection, id) {
+    $.get('/status/' + name_connection, function(data){
+        if (data.process == true) {
+            $('#connections' + id).css("background-color", "#7AA899")
+        } else {
+            $('#connections' + id).css("background-color", "#FF9898")
+        }
+    });
+};
