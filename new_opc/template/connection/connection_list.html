@@ -44,7 +44,11 @@
                 </table>
             </div>
             <div class="button-area" id="button-area{{connection.id}}">
-                <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}">
+                {% if connection.switchr %}
+                    <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}" checked>
+                {% else %}
+                    <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}">
+                {% endif %}
                 <label for="toggle">
                     <button class="button-change" id="change{{connection.id}}">Change param</button>
             </div>
@@ -66,7 +70,13 @@
         $("#switcher-run" + this.id.substr(12)).click(function () {
             switcher_background(this.id.substr(12), this)
         });
+        if ($(this).is(':checked')) {
+            $('#connections' + this.id.substr(12)).css("background-color", "#7AA899")
+            start_check_status_process(this.id.substr(12))
+        };
     });
+
+
     
 </script>
 

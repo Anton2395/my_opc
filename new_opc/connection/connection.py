@@ -23,7 +23,8 @@ def list_connections():
                 "driver": connection.driver,
                 "ip": connection.ip_addres,
                 "slot": connection.slot,
-                "rack": connection.rack 
+                "rack": connection.rack,
+                "switchr": connection.switchr
             }
             connections.append(connection_dict)
         if connections:

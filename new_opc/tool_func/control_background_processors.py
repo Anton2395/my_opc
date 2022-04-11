@@ -8,6 +8,13 @@ from tool_func import create_value_list_and_other as _generator_db
 from DB import models as _models
 
 
+def set_switcher_off(db:object=_models.Session())-> None:
+    for connect in db.query(_models.ConnectionList).all():
+        connect.switchr = False
+        db.commit()
+    db.close()
+
+
 def add_new_process(all_work_process: dict, new_name_connection: str, all_work_status:dict) -> bool:
     """
     Добавляет в словарь новый процесс, но не запускает его
@@ -63,7 +70,22 @@ def start_process(all_work_process: dict, name_started_process: str) -> bool:
     - **name_started_process** : имя запускаемого процесса
     """
     try:
-        all_work_process[name_started_process]["process"].start()
+        connect = _generator_db.creat_param(name_started_process)
+        if connect["driver"] == "Snap7":
+            all_work_process[connect["name"]] = {}
+            all_work_process[connect["name"]]["status"] = _mp.Value(c_bool, False)
+            all_work_process[connect["name"]]["stop"] = _mp.Value(c_bool, False)
+            all_work_process[connect["name"]]["process"] = _processor.ConnectSnapProcess(
+                name_connect=connect["name"],
+                ip=connect["ip"],
+                port=connect["port"],
+                slot=connect["slot"],
+                rack=connect["rack"],
+                values=connect["area"],
+                stop_point=all_work_process[connect["name"]]["stop"],
+                status=all_work_process[connect["name"]]["status"]
+            )
+            all_work_process[connect["name"]]["process"].start()
         _time.sleep(1)
         return True
     except:
@@ -78,18 +100,29 @@ def stop_process(all_work_process: dict, name_stop_process: str) -> bool:
     - **name_stop_process** : имя останавливаемого процесса
     """
     try:
-        print("trye")
-        i = 1
         while all_work_process[name_stop_process]["process"].is_alive():
-            print(i)
-            print(all_work_process[name_stop_process]["process"].is_alive())
-            i += 1
-            all_work_process[name_stop_process]["process"].terminate()
-            all_work_process[name_stop_process]["process"].join()
+            all_work_process[name_stop_process]["stop"].value = True
             _time.sleep(1)
-        return True
+            return True
     except:
         return False
+
+def change_switcher(name:str)-> None:
+    """
+    Сменяет статус переключателя на противоположный
+    """
+    with _models.get_db() as db:
+        connect = db.query(_models.ConnectionList).filter(
+            _models.ConnectionList.name == name
+        )[0]
+        if connect.switchr:
+            connect.switchr = False
+        else:
+            connect.switchr = True
+        db.commit()
+        db.refresh(connect)
+
+
 
 
 def start_all_process(all_work_process: dict) -> bool:
@@ -98,12 +131,13 @@ def start_all_process(all_work_process: dict) -> bool:
 
     - **all_work_process** : словарь со всеми добавленными в работу процессами
     """
-    # try:
+#     # try:
     print("start all process - load")
     for connect in _generator_db.create_all_param():
         if connect["driver"] == "Snap7":
             all_work_process[connect["name"]] = {}
             all_work_process[connect["name"]]["status"] = _mp.Value(c_bool, False)
+            all_work_process[connect["name"]]["stop"] = _mp.Value(c_bool, False)
             all_work_process[connect["name"]]["process"] = _processor.ConnectSnapProcess(
                 name_connect=connect["name"],
                 ip=connect["ip"],
@@ -111,6 +145,7 @@ def start_all_process(all_work_process: dict) -> bool:
                 slot=connect["slot"],
                 rack=connect["rack"],
                 values=connect["area"],
+                stop_point=all_work_process[connect["name"]]["stop"],
                 status=all_work_process[connect["name"]]["status"]
             )
             if connect["switchr"]:

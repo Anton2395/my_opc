@@ -119,3 +119,7 @@ def create_all_param(sessions: object = _models.Session()) -> list:
     sessions.close()
     print(all_parap)
     return all_parap
+
+
+def creat_param(name, sessions: object = _models.Session()):
+    return create_connection_param(sessions.query(ConnectionList).filter(ConnectionList.name==name)[0])

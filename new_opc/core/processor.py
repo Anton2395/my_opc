@@ -14,7 +14,8 @@ from core.DB_connect import createConnection
 
 class ConnectSnapProcess(Process):
 
-    def __init__(self, name_connect:str, ip:str, port:int, slot:int, rack:int, status:object, values:list=[]):
+    def __init__(self, name_connect:str, ip:str, port:int, slot:int, rack:int,
+                status:object, stop_point:object, values:list=[]):
         """Класс процесса для подключения к ПЛК по адресу address, с портом port (по умолчанию 102) и получения заданных
         значений из блока данных db в промежутке с start_address_db по start_address_db+offset_db
         (offset_db - количество забираемых byte из блока). После получения данных разбирает bytearray по
@@ -34,6 +35,7 @@ class ConnectSnapProcess(Process):
         self.name_connect = name_connect
         self.ip = ip
         self.status = status
+        self.stop_point = stop_point
         self.rack = rack
         self.slot = slot
         self.port = port
@@ -177,7 +179,10 @@ class ConnectSnapProcess(Process):
     def run(self):
         self.__create_table_if_not_exist()  # создание таблиц если их нет
         while True:
+            time.sleep(1)
             try:
+                if self.stop_point.value:
+                    break
                 for area in self.values_list:
                     if (not self.__get_db_data(area)):
                         self.__reconect_to_plc()
@@ -193,11 +198,10 @@ class ConnectSnapProcess(Process):
                         self.status.value = True
                     for thread in threads:
                         thread.join()
-                    self._conn.commit()
-            
-                    
+                    self._conn.commit()                    
             except:
                 self.status.value = False
+        self.stop_point.value = False
 
     def disassemble_float(self, data) -> float:  # метод для преобразования данных в real
         val = struct.unpack('>f', data)

@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-import uvicorn as _uvicorn
+# import uvicorn as _uvicorn
 import multiprocessing as _mp
 
 from connection.connection import app_connect
@@ -24,6 +24,7 @@ def index() -> str:
     str = ""
     for index, connect_str in enumerate(process_connect):
         str += f"{index+1}. {connect_str}\n"
+    print(len(process_connect))
     return str
 
 
@@ -58,6 +59,7 @@ def delete_process():
 @app.route('/stop/<name_process>', methods=['POST'])
 def stop_process(name_process: str) -> str:
     if _service_process.stop_process(all_work_process=process_connect, name_stop_process=name_process):
+        _service_process.change_switcher(name_process)
         return "Process stop DONE"
     else:
         return "Process stop ERROR"
@@ -66,6 +68,7 @@ def stop_process(name_process: str) -> str:
 @app.route('/start/<name_process>', methods=['POST'])
 def start_process(name_process: str) -> str:
     if _service_process.start_process(all_work_process=process_connect, name_started_process=name_process):
+        _service_process.change_switcher(name_process)
         return "Process start DONE"
     else:
         return "Process start ERROR"
@@ -94,6 +97,7 @@ def get_status(name_process: str) -> dict:
 
 if __name__ == "__main__":
     # _mp.set_start_method("fork")
-    _service_process.start_all_process(all_work_process=process_connect)
+    # _service_process.start_all_process(all_work_process=process_connect)
+    _service_process.set_switcher_off()
     _service_process.start_flask(app)
 
