@@ -4,6 +4,7 @@
 <head>
     <title>List connection</title>
     <link rel="stylesheet" href="/static/css/connection.css">
+    <link rel="stylesheet" href="/static/css/value.css">
     <link rel="preconnect" href="/static/font">
     <script src="/static/js/jquery-3.6.0.min.js"></script>
     <script src="/static/js/connection_list.js"></script>
@@ -74,6 +75,10 @@
             $('#connections' + this.id.substr(12)).css("background-color", "#7AA899")
             start_check_status_process(this.id.substr(12))
         };
+    });
+
+    $.get("/value/",function(data){
+        $("body").append(data)
     });
 
 

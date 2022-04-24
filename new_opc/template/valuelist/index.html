@@ -1,0 +1,61 @@
+<div>
+    <div class="window" id="button-back">  
+    </div>
+    <div class="window" id="window_param">
+        <div class="window cssload-loader"></div>
+    </div>
+    
+</div>
+<script>
+
+    $.get('/value/list_volue/1', function(data){
+        $('.cssload-loader').hide("slow")
+        $('#window_param').append(`
+            <div id="change-hight" class="change-hight-min"><div id="button-add-value" class="normal-color"><div id="text-button-value">Add value...</div></div></div>
+        `)
+        $('#button-add-value').click(function () {
+            now_class = $(this.parentElement).attr("class");
+            button_js = this
+            text_button_js = button_js.firstChild
+            // console.log(text_button_js)
+            if (now_class=="change-hight-min") {
+                $(this.parentElement).removeClass('change-hight-min').addClass('change-hight-max');
+                add_form_pole(this.parentElement)
+            } else {
+                $(this.parentElement).removeClass('change-hight-max').addClass('change-hight-min');
+                delete_form_pole()
+            }
+            if ($(text_button_js).text()=='Add value...') {
+                $(button_js).removeClass('normal-color').addClass('red-color')
+                $(text_button_js).text('Cencel')
+            } else {
+                $(text_button_js).text('Add value...')
+                $(button_js).removeClass('red-color').addClass('normal-color')
+            }
+
+        })
+    });
+
+    function add_form_pole(object_add, data_pole) {
+        $(object_add).append(`
+            <div id="form-pole">
+                <div class="pole">
+                    <label>Name value:</label>
+                    <input type="text">
+                </div>
+                <div class="pole">
+                    <label>DB:</label>
+                    <input type="text">
+                </div>
+            </div>
+        `)
+    }
+    function delete_form_pole(object_add, data_pole) {
+        $("#form-pole").remove()
+    }
+    
+    $('#button-back').click(function (){
+        $('.window').remove();
+        // alert(1)
+    })
+</script>

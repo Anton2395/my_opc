@@ -106,9 +106,11 @@ function change_method_front_save(id) {
 function switcher_background(id, object) {
     if ($(object).is(':checked')) {
         $('#connections' + id).css("background-color", "#7AA899")
+        $('#change1').prop('disabled', true);
         start_process(id)
         start_check_status_process(id)
     } else {
+        $('#change1').prop('disabled', false);
         stop_check_status_process(id)
         stop_process(id)
         $('#connections' + id).css("background-color", "#6E6C78")

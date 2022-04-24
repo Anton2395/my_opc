@@ -1,6 +1,13 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
 body {
     background-color: #3B3A3D;
     font-family: 'Roboto', sans-serif;
+    width: 100%;
 }
 p {
     margin: 0;
@@ -8,6 +15,7 @@ p {
     border: 0;
 }
 .connections { /*поле одного соединения*/
+    z-index: 99;
     border-radius: 5px;
     float: left; /*Задаем обтекание*/
     background: #6E6C78;

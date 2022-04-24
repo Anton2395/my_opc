@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 import multiprocessing as _mp
 
 from connection.connection import app_connect
+from valuelist.valuelist import app_value
 from main import app_process 
 from DB import models as _models
 from tool_func import control_background_processors as _service_process
@@ -17,6 +18,7 @@ app = Flask('opc_service', static_url_path='/static',
 # add router file
 app.register_blueprint(app_connect, url_prefix="/connections")
 app.register_blueprint(app_process, url_prefix="/process")
+app.register_blueprint(app_value, url_prefix="/value")
 
 
 @app.route('/', methods=['GET'])
