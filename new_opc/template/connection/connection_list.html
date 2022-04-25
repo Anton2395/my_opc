@@ -45,13 +45,16 @@
                 </table>
             </div>
             <div class="button-area" id="button-area{{connection.id}}">
+                <div class="switcher-area">
                 {% if connection.switchr %}
                     <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}" checked>
                 {% else %}
                     <input class="switcher" type="checkbox" id="switcher-run{{connection.id}}">
                 {% endif %}
                 <label for="toggle">
-                    <button class="button-change" id="change{{connection.id}}">Change param</button>
+                </div>
+                <button class="button-change" id="change{{connection.id}}">Change param</button>
+                <button class="button-change" id="area{{connection.id}}">Area</button>
             </div>
         </div>
         {% endfor %}
@@ -62,10 +65,18 @@
     create_button_add()
 
     $('.button-change').each(function (index, elem) {
-        $("#" + this.id).click(function () {
-            change_to_form_and_back(this.id.substr(6))
-            console.log(this.id)
-        });
+        if ($(this).text() == 'Change param'){
+            $(this).click(function () {
+                change_to_form_and_back(this.id.substr(6))
+                console.log(this.id)
+            });
+        };
+        if ($(this).text() == 'Area') {
+            id = this.id.substr(4)
+            $(this).click(function () {
+                console.log($('#name'+id).text())
+            });
+        }
     });
     $('.switcher').each(function (index, elem) {
         $("#switcher-run" + this.id.substr(12)).click(function () {
@@ -77,9 +88,9 @@
         };
     });
 
-    $.get("/value/",function(data){
-        $("body").append(data)
-    });
+    // $.get("/value/",function(data){
+    //     $("body").append(data)
+    // });
 
 
     

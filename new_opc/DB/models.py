@@ -53,7 +53,6 @@ class Area(base):
     name = Column(String(20), nullable=True)
     area_memory = Column(String(15), nullable=True)
     group = Column(Boolean, nullable=False, default=False)
-    valuelist = relationship('ValueList', cascade="all, delete")
     db = Column(Integer, nullable=True)
     start = Column(Integer, nullable=False)
     size = Column(Integer, nullable=True)

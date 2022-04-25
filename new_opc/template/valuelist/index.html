@@ -2,6 +2,7 @@
     <div class="window" id="button-back">  
     </div>
     <div class="window" id="window_param">
+        <div id="name-connections-area" value="{id}"><label>{Name_connections}</label></div>
         <div class="window cssload-loader"></div>
     </div>
     
@@ -11,7 +12,7 @@
     $.get('/value/list_volue/1', function(data){
         $('.cssload-loader').hide("slow")
         $('#window_param').append(`
-            <div id="change-hight" class="change-hight-min"><div id="button-add-value" class="normal-color"><div id="text-button-value">Add value...</div></div></div>
+            <div id="change-hight" class="change-hight-min"><div id="button-add-value" class="normal-color"><div id="text-button-value">Add area...</div></div></div>
         `)
         $('#button-add-value').click(function () {
             now_class = $(this.parentElement).attr("class");
@@ -25,11 +26,11 @@
                 $(this.parentElement).removeClass('change-hight-max').addClass('change-hight-min');
                 delete_form_pole()
             }
-            if ($(text_button_js).text()=='Add value...') {
+            if ($(text_button_js).text()=='Add area...') {
                 $(button_js).removeClass('normal-color').addClass('red-color')
                 $(text_button_js).text('Cencel')
             } else {
-                $(text_button_js).text('Add value...')
+                $(text_button_js).text('Add area...')
                 $(button_js).removeClass('red-color').addClass('normal-color')
             }
 
@@ -38,20 +39,43 @@
 
     function add_form_pole(object_add, data_pole) {
         $(object_add).append(`
-            <div id="form-pole">
+        <div id="all-in-param">
+            <div class="form-pole">
                 <div class="pole">
-                    <label>Name value:</label>
+                    <label>Name area:</label>
+                    <input type="text">
+                </div>
+                <div class="pole">
+                    <label>Area memory PLC:</label>
                     <input type="text">
                 </div>
                 <div class="pole">
                     <label>DB:</label>
-                    <input type="text">
+                    <input type="number">
                 </div>
             </div>
+            <div class="form-pole">
+                <div class="pole">
+                    <label>Start:</label>
+                    <input type="number">
+                </div>
+                <div class="pole">
+                    <label>Size:</label>
+                    <input type="number">
+                </div>
+            </div>
+        </div>
+        
+        <div id="form-button">Save</div>
         `)
+        $('#all-in-param').hide()
+        $('#form-button').hide()
+        $('#all-in-param').show('slow')
+        $('#form-button').show('slow')
     }
     function delete_form_pole(object_add, data_pole) {
-        $("#form-pole").remove()
+        $("#all-in-param").remove()
+        $("#form-button").remove()
     }
     
     $('#button-back').click(function (){
