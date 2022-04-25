@@ -68,13 +68,16 @@
         if ($(this).text() == 'Change param'){
             $(this).click(function () {
                 change_to_form_and_back(this.id.substr(6))
-                console.log(this.id)
             });
         };
         if ($(this).text() == 'Area') {
             id = this.id.substr(4)
             $(this).click(function () {
-                console.log($('#name'+id).text())
+                $.get("/value/"+id,function(data){
+                    $("body").append(data)
+                    // $('#name-connection-page-area').text($('#name'+id).text())
+                });
+                // console.log($('#name'+id).text())
             });
         }
     });

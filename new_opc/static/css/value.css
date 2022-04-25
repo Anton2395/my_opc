@@ -104,11 +104,14 @@
 #name-connections-area label {
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
     margin: 1%;
     color: white;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
+    border: 2px solid #4343446c;
+    border-radius: 3px;
 }
 
 .form-pole {
@@ -126,7 +129,7 @@
 #form-button {
     display: flex;
     align-items: center;
-  justify-content: center;
+    justify-content: center;
     background-color: #7aa899;
     border: 1px solid #7aa899;
     border-radius: 6px;

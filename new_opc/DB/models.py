@@ -29,7 +29,7 @@ class ConnectionList(base):
     slot = Column(Integer, nullable=False)
     rack = Column(Integer, nullable=False)
     switchr = Column(Boolean, nullable=False, default=False)
-    area = relationship('Area', cascade="all, delete")
+    area = relationship('Area', cascade="all, delete", back_populates="connection")
     matharea = relationship('MathArea', cascade="all, delete")
  
 
@@ -56,6 +56,7 @@ class Area(base):
     db = Column(Integer, nullable=True)
     start = Column(Integer, nullable=False)
     size = Column(Integer, nullable=True)
+    connection = relationship('ConnectionList', back_populates="area")
     valuelist = relationship('ValueList', cascade="all, delete")
     
 

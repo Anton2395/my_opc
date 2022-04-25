@@ -1,85 +1,96 @@
-<div>
-    <div class="window" id="button-back">  
-    </div>
-    <div class="window" id="window_param">
-        <div id="name-connections-area" value="{id}"><label>{Name_connections}</label></div>
-        <div class="window cssload-loader"></div>
-    </div>
-    
-</div>
-<script>
-
-    $.get('/value/list_volue/1', function(data){
-        $('.cssload-loader').hide("slow")
-        $('#window_param').append(`
-            <div id="change-hight" class="change-hight-min"><div id="button-add-value" class="normal-color"><div id="text-button-value">Add area...</div></div></div>
-        `)
-        $('#button-add-value').click(function () {
-            now_class = $(this.parentElement).attr("class");
-            button_js = this
-            text_button_js = button_js.firstChild
-            // console.log(text_button_js)
-            if (now_class=="change-hight-min") {
-                $(this.parentElement).removeClass('change-hight-min').addClass('change-hight-max');
-                add_form_pole(this.parentElement)
-            } else {
-                $(this.parentElement).removeClass('change-hight-max').addClass('change-hight-min');
-                delete_form_pole()
-            }
-            if ($(text_button_js).text()=='Add area...') {
-                $(button_js).removeClass('normal-color').addClass('red-color')
-                $(text_button_js).text('Cencel')
-            } else {
-                $(text_button_js).text('Add area...')
-                $(button_js).removeClass('red-color').addClass('normal-color')
-            }
-
-        })
-    });
-
-    function add_form_pole(object_add, data_pole) {
-        $(object_add).append(`
-        <div id="all-in-param">
-            <div class="form-pole">
-                <div class="pole">
-                    <label>Name area:</label>
-                    <input type="text">
-                </div>
-                <div class="pole">
-                    <label>Area memory PLC:</label>
-                    <input type="text">
-                </div>
-                <div class="pole">
-                    <label>DB:</label>
-                    <input type="number">
-                </div>
-            </div>
-            <div class="form-pole">
-                <div class="pole">
-                    <label>Start:</label>
-                    <input type="number">
-                </div>
-                <div class="pole">
-                    <label>Size:</label>
-                    <input type="number">
-                </div>
-            </div>
+{% if data %}
+    <div>
+        <div class="window" id="button-back">  
+        </div>
+        <div class="window" id="window_param">
+            <div id="name-connections-area"><label id="name-connection-page-area">{{data.name}}</label></div>
+            <div class="window cssload-loader"></div>
         </div>
         
-        <div id="form-button">Save</div>
-        `)
-        $('#all-in-param').hide()
-        $('#form-button').hide()
-        $('#all-in-param').show('slow')
-        $('#form-button').show('slow')
-    }
-    function delete_form_pole(object_add, data_pole) {
-        $("#all-in-param").remove()
-        $("#form-button").remove()
-    }
-    
-    $('#button-back').click(function (){
-        $('.window').remove();
-        // alert(1)
-    })
-</script>
+    </div>
+    <script>
+
+        $.get('/value/list_volue/{{data}}', function(data){
+            $('.cssload-loader').hide("slow")
+            $('#window_param').append(`
+                <div id="change-hight" class="change-hight-min"><div id="button-add-value" class="normal-color"><div id="text-button-value">Add area...</div></div></div>
+            `)
+            $('#button-add-value').click(function () {
+                now_class = $(this.parentElement).attr("class");
+                button_js = this
+                text_button_js = button_js.firstChild
+                if (now_class=="change-hight-min") {
+                    $(this.parentElement).removeClass('change-hight-min').addClass('change-hight-max');
+                    add_form_pole(this.parentElement)
+                } else {
+                    $(this.parentElement).removeClass('change-hight-max').addClass('change-hight-min');
+                    delete_form_pole()
+                }
+                if ($(text_button_js).text()=='Add area...') {
+                    $(button_js).removeClass('normal-color').addClass('red-color')
+                    $(text_button_js).text('Cencel')
+                } else {
+                    $(text_button_js).text('Add area...')
+                    $(button_js).removeClass('red-color').addClass('normal-color')
+                }
+
+            })
+        });
+
+        function add_form_pole(object_add, data_pole) {
+            $(object_add).append(`
+            <div id="all-in-param">
+                <div class="form-pole">
+                    <div class="pole">
+                        <label>Name area:</label>
+                        <input type="text">
+                    </div>
+                    <div class="pole">
+                        <label>Area memory PLC:</label>
+                        <input type="text">
+                    </div>
+                    <div class="pole">
+                        <label>DB:</label>
+                        <input type="number">
+                    </div>
+                </div>
+                <div class="form-pole">
+                    <div class="pole">
+                        <label>Start:</label>
+                        <input type="number">
+                    </div>
+                    <div class="pole">
+                        <label>Size:</label>
+                        <input type="number">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="form-button">Save</div>
+            `)
+            $('#all-in-param').hide()
+            $('#form-button').hide()
+            $('#all-in-param').show('slow')
+            $('#form-button').show('slow')
+        }
+        function delete_form_pole(object_add, data_pole) {
+            $("#all-in-param").remove()
+            $("#form-button").remove()
+        }
+        
+        $('#button-back').click(function (){
+            $('.window').remove();
+            // alert(1)
+        })
+    </script>
+{% else %}
+    <div>
+        <div class="window" id="button-back">  
+        </div>
+        <div class="window" id="window_param">
+            <div id="name-connections-area"><label id="name-connection-page-area">{{data}}</label></div>
+            <div class="window cssload-loader"></div>
+        </div>
+        
+    </div>
+{% endif %}
