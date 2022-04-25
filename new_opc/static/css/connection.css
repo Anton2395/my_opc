@@ -1,3 +1,7 @@
+* {
+    padding: 0;
+    margin: 0;
+  }
 body, html {
     margin: 0;
     padding: 0;
@@ -115,7 +119,14 @@ p {
     border: 1px solid;
 }
 .button-area {
+    display: flex;
     margin: 7px;
+    align-items: center;
+}
+.switcher-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #button-add-connect {
     border: 2px solid #8e8d96;
@@ -206,10 +217,10 @@ input[type="checkbox"] {
 }
 
 .button-change:hover {
-    box-shadow: 0 0 10px 0 #3498db00 inset, 0 0 10px 4px #aaff71;
+    box-shadow: 0 0 4px 0 #3498db00 inset, 0 0 4px 4px #aaff7196;
 }
 
 .button-change:active {
-    box-shadow: 0 0 3px 0 #3498db00 inset, 0 0 3px 3px #aaff71;
+    box-shadow: 0 0 3px 0 #3498db00 inset, 0 0 3px 3px #aaff7196;
 }
   
