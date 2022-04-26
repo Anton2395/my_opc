@@ -86,6 +86,7 @@ def start_process(all_work_process: dict, name_started_process: str) -> bool:
                 status=all_work_process[connect["name"]]["status"]
             )
             all_work_process[connect["name"]]["process"].start()
+            print('done----------------------------------------')
         _time.sleep(1)
         return True
     except:

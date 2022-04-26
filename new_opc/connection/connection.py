@@ -38,25 +38,10 @@ def list_connections():
             }
         return render_template('connection/connection_list.html', data=data)
 
-
-@app_connect.route("/<id_connection>", methods=["GET", "POST"])
-def refactor_record(id_connection: int):
-    if request.method == "GET":
-        with _models.get_db() as db:
-            connect_db = _services.get_connection_id(db=db, id=id_connection)
-        return render_template('connection/refactor.html', connect=connect_db)
-    elif request.method == "POST":
-        with _models.get_db() as db:
-            if _services.change_record_connection(db=db, form=request.form, id=id_connection):
-                return redirect(url_for('connections.list_connections'))
-            else:
-                abort(400)
-
 @app_connect.route("/add_connection", methods=["POST"])
 def add_connection():
     try:
         id = int(request.form['id'])
-        print(id)
         name = request.form['name'].replace(" ", "_")
         ip = request.form['ip'].replace(" ", "")
         driver = request.form['driver'].replace(" ", "")
@@ -93,3 +78,30 @@ def add_connection():
             "text": str(e),
         }
     return answer
+
+
+@app_connect.route('/update/<id_connect>', methods=['POST'])
+def update(id_connect:str) -> str:
+    db = _models.Session()
+    try:
+        data_post = request.json
+        name = data_post['name']
+        driver = data_post['driver']
+        ip_addres = data_post['ip_addres']
+        port = int(data_post['port'])
+        slot = int(data_post['slot'])
+        rack = int(data_post['rack'])
+        id_connect = int(id_connect)
+        data = db.query(_models.ConnectionList).get(id_connect)
+        data.name = name
+        data.driver = driver
+        data.ip_addres = ip_addres
+        data.port = port
+        data.slot = slot
+        data.rack = rack
+        db.commit()
+        db.close()
+    except:
+        db.close()
+        data = None
+    return "seccses"
