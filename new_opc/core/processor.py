@@ -60,19 +60,23 @@ class ConnectSnapProcess(Process):
         """
         получение данных из ДБ блока в формате bytearray
         """
-        try:
-            if area["area"] == 'DB':
-                self.bytearray_data = self.client.db_read(area["db"], area["start"], area["size"])
-                return True
-            elif area["area"] == 'PA':
-                self.bytearray_data = self.client.read_area(snap7.types.areas['PA'], 0, area["start"], area["size"])
-                return True
-            else:
-                return False
-        except Exception as e:
-            print("Can't get data from PLC. Text error:")
-            print(e)
+        # try:
+        print("try")
+        if area["area"] == 'DB':
+            print("true")
+            self.bytearray_data = self.client.db_read(area["db"], area["start"], area["size"])
+            return True
+        elif area["area"] == 'PA':
+            print("true2")
+            self.bytearray_data = self.client.read_area(snap7.types.areas['PA'], 0, area["start"], area["size"])
+            return True
+        else:
+            print("false")
             return False
+        # except Exception as e:
+        #     print("Can't get data from PLC. Text error:")
+        #     print(e)
+        #     return False
 
     def __reconect_to_plc(self) -> bool:
         """пере подключение к плк в случае ошибки валидации данных"""
@@ -184,7 +188,7 @@ class ConnectSnapProcess(Process):
                 if self.stop_point.value:
                     break
                 for area in self.values_list:
-                    if (not self.__get_db_data(area)):
+                    if (not self.__get_db_data(area)):####
                         self.__reconect_to_plc()
                         self.status.value = False
                     else:
@@ -199,7 +203,7 @@ class ConnectSnapProcess(Process):
                     for thread in threads:
                         thread.join()
                     self._conn.commit()                    
-            except:
+            except Exception as e:
                 self.status.value = False
         self.stop_point.value = False
 
