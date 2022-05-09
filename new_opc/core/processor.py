@@ -60,23 +60,19 @@ class ConnectSnapProcess(Process):
         """
         получение данных из ДБ блока в формате bytearray
         """
-        # try:
-        print("try")
-        if area["area"] == 'DB':
-            print("true")
-            self.bytearray_data = self.client.db_read(area["db"], area["start"], area["size"])
-            return True
-        elif area["area"] == 'PA':
-            print("true2")
-            self.bytearray_data = self.client.read_area(snap7.types.areas['PA'], 0, area["start"], area["size"])
-            return True
-        else:
-            print("false")
+        try:
+            if area["area_memory"] == 'DB':
+                self.bytearray_data = self.client.db_read(area["db"], area["start"], area["size"])
+                return True
+            elif area["area_memory"] == 'PA':
+                self.bytearray_data = self.client.read_area(snap7.types.areas['PA'], 0, area["start"], area["size"])
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Can't get data from PLC. Text error:")
+            print(e)
             return False
-        # except Exception as e:
-        #     print("Can't get data from PLC. Text error:")
-        #     print(e)
-        #     return False
 
     def __reconect_to_plc(self) -> bool:
         """пере подключение к плк в случае ошибки валидации данных"""
@@ -115,7 +111,7 @@ class ConnectSnapProcess(Process):
                                     now_time TIMESTAMP  WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                                     value {type_sql})''')
                 self._conn.commit()
-                print('create table')
+                print(f'create table mvlab_{value["table_name"]}')
 
     def __parse_bytearray(self, value_param: dict) -> any:
         """разбор полученных данных с ПЛК"""
@@ -158,7 +154,6 @@ class ConnectSnapProcess(Process):
         minimal_write_time = value_param["time_write"] / 1000
         
         if 'if_change' in value_param and value_param["if_change"] and not value_param["table_name"] in self.values:
-            print(self.values)
             self.values[value_param["table_name"]] = value
             self.values[f'write_time_{value_param["table_name"]}'] = datetime.datetime.now()
             self.__write_to_db(tablename=value_param["table_name"], value=value)
@@ -167,7 +162,6 @@ class ConnectSnapProcess(Process):
             (self.values[value_param['table_name']] != value or \
             ((now - self.values[f'write_time_{value_param["table_name"]}']).total_seconds() > value_param['time_rewrite']*60)):
             if (now - self.values[f'write_time_{value_param["table_name"]}']).total_seconds() > minimal_write_time:
-                print((now - self.values[f'write_time_{value_param["table_name"]}']).total_seconds(), minimal_write_time)
                 self.values[value_param['table_name']] = value
                 self.values[f'write_time_{value_param["table_name"]}'] = datetime.datetime.now()
                 self.__write_to_db(tablename=value_param["table_name"], value=value)
@@ -175,7 +169,6 @@ class ConnectSnapProcess(Process):
         if 'if_change' in value_param and not value_param['if_change']:
             if not f'write_time_{value_param["table_name"]}' in self.values or \
                  (now - self.values[f'write_time_{value_param["table_name"]}']).total_seconds() > minimal_write_time:
-                print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
                 self.values[f'write_time_{value_param["table_name"]}'] = datetime.datetime.now()
                 self.__write_to_db(tablename=value_param['table_name'], value=value)
 
@@ -183,7 +176,7 @@ class ConnectSnapProcess(Process):
     def run(self):
         self.__create_table_if_not_exist()  # создание таблиц если их нет
         while True:
-            time.sleep(1)
+            # time.sleep(1)
             try:
                 if self.stop_point.value:
                     break

@@ -123,7 +123,7 @@ def add_value() -> str:
         "if_change":<bool>,
         "divide":<bool>,
         "divide_number":<float>,
-        "time_write_if_change":<int>(sec?),
+        "time_write_if_change":<int>(msec),
         "time_rewrite":<int>(min?),
         "bit":<int>
     }
