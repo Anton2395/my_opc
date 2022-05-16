@@ -22,7 +22,58 @@
     width: 94%;
     height: 94%;
     background-color: #8e8d96;
+    overflow-y: auto;
 }
+
+.area_lable {
+    display: flex;
+    align-items: center;
+    width: 98%;
+    height: 35px;
+    margin-top: 1%;
+    margin-left: 1%;
+    border-radius: 6px;
+    background-color: #4343446c;
+}
+
+.lable_param {
+    width: 16%;
+    height: 60%;
+    vertical-align: middle;
+    text-align:center;
+    border-radius: 3px;
+    background-color: #4343446c;
+    color: white;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+#delete_area {
+    height: 55%;
+    width: 3%;
+    border-radius: 3px;
+    background-color: red;
+    margin: 1%;
+}
+
+#change_area
+{
+    height: 55%;
+    width: 3%;
+    border-radius: 3px;
+    background-color: rgba(229, 255, 0, 0.454);
+    margin: 1%;
+}
+
+
+
+::-webkit-scrollbar { width: 3px; height: 3px; border-radius: 6px;}
+::-webkit-scrollbar-button {  background-color: #666; }
+::-webkit-scrollbar-track {  background-color: rgba(153, 153, 153, 0); border-radius: 6px; }
+::-webkit-scrollbar-track-piece { background-color: #ffffff00; }
+::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #999;}
+::-webkit-resizer { background-color: #666;}
 
 #button-add-value {
     display: table;

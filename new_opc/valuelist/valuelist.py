@@ -1,9 +1,10 @@
-from crypt import methods
 import time as _tm
+import json as _json
 
 from flask import Blueprint, render_template, request, redirect, url_for, abort
 
 from DB import models as _models
+
 
 
 
@@ -21,12 +22,27 @@ def list_value_page(id_connection:int) -> str:
             "id": i.id,
             "name": i.name
         }
+    db.close()
     return render_template('valuelist/index.html', data=data)
 
 @app_value.route("/list_volue/<id_connection>", methods=["GET"])
 def list_value_data(id_connection: int) -> str:
-    data = {}
-    _tm.sleep(2)
+    _tm.sleep(1)
+    data = []
+    # id_connection = id_connection
+    db = _models.Session()
+    areas = db.query(_models.Area).filter(_models.Area.connection_id==id_connection)
+    for area in areas:
+        area_dict = {
+            "id": area.id,
+            "name": area.name,
+            "area_memory": area.area_memory,
+            "db": area.db,
+            "start": area.start,
+            "size": area.size
+        }
+        data.append(area_dict)
+    data = _json.dumps(data)
     return data
 
 
