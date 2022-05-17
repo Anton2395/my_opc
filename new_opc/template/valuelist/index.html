@@ -7,7 +7,8 @@
         <div class="window cssload-loader"></div>
     </div>
     <script>
-
+        $('#window-html').hide()
+        $('#window-html').show('slow')
         $.get('/value/list_volue/{{data.id}}', function (data) {
             data = JSON.parse(data)
             $('.cssload-loader').hide("slow")
@@ -101,7 +102,7 @@
             all_area.forEach(area => {
                 // console.log(area)
                 $('#window_param').append(`
-                <div id="area` + area.id + `" class="area_lable">
+                <div id="window_area` + area.id + `" class="area_lable">
                     <div class="lable_param">Name: ` + area.name + `</div>
                     <div class="lable_param">Memory area: ` + area.area_memory + `</div>
                     <div class="lable_param">DB: ` + area.db + `</div>
@@ -109,13 +110,18 @@
                     <div class="lable_param">Size: ` + area.size + `</div>
                     <div id="change_area" value="` + area.id + `"></div>
                     <div id="delete_area" value="` + area.id + `"></div>
+                    <div id="variables_area" value="` + area.id + `">Variables</div>
                 </div>
                 `)
+                $('#window_area' + area.id).hide().show('normal')
+
             });
         }
 
         $('#button-back').click(function () {
-            $('#window-html').remove();
+            $('#window-html').hide('slow', function() {
+                $(this).remove();
+            });
         })
     </script>
 </div>

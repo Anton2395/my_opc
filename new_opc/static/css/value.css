@@ -52,8 +52,17 @@
     height: 55%;
     width: 3%;
     border-radius: 3px;
-    background-color: red;
+    background-color: rgba(231, 55, 55, 0.812);
     margin: 1%;
+    transition: box-shadow .1s;
+}
+
+#delete_area:hover {
+    box-shadow: 0px 0px 5px rgba(53, 53, 4, 0.508);
+}
+
+#delete_area:active {
+    box-shadow: 0px 0px 1px rgba(53, 53, 4, 0.508);
 }
 
 #change_area
@@ -63,6 +72,40 @@
     border-radius: 3px;
     background-color: rgba(229, 255, 0, 0.454);
     margin: 1%;
+    transition: box-shadow .1s;
+}
+
+#change_area:hover {
+    box-shadow: 0px 0px 5px rgba(53, 53, 4, 0.508);
+}
+
+#change_area:active {
+    box-shadow: 0px 0px 1px rgba(53, 53, 4, 0.508);
+}
+
+#variables_area {
+    text-align:center;
+    vertical-align: middle;
+    height: 55%;
+    width: 80px;
+    border-radius: 3px;
+    background-color: rgba(220, 222, 203, 0.65);
+    margin: 1%;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+    transition: box-shadow .1s;
+}
+
+#variables_area:hover {
+    box-shadow: 0px 0px 7px rgba(53, 53, 4, 0.66);
+}
+
+#variables_area:active {
+    box-shadow: 0px 0px 1px rgba(53, 53, 4, 0.508);
 }
 
 
