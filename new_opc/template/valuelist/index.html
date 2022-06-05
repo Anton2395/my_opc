@@ -5,6 +5,16 @@
     <div class="window" id="window_param">
         <div id="name-connections-area"><label id="name-connection-page-area">{{data.name}}</label></div>
         <div class="window cssload-loader"></div>
+        <div id="window_area` + area.id + `" class="area_lable head">
+            <div class="lable_param head">Name</div>
+            <div class="lable_param head">Memory area</div>
+            <div class="lable_param head">DB</div>
+            <div class="lable_param head">Start</div>
+            <div class="lable_param">Size</div>
+            <div class="no_visible_first"></div>
+            <div class="no_visible_first"></div>
+            <div class="no_visible_sec"></div>
+        </div>
     </div>
     <script>
         $('#window-html').hide()
@@ -29,7 +39,7 @@
                 }
                 if ($(text_button_js).text() == 'Add area...') {
                     $(button_js).removeClass('normal-color').addClass('red-color')
-                    $(text_button_js).text('Cencel')
+                    $(text_button_js).text('Cancel')
                 } else {
                     $(text_button_js).text('Add area...')
                     $(button_js).removeClass('red-color').addClass('normal-color')
@@ -76,50 +86,138 @@
             $('#form-button').click(function () {
                 data = {
                     name: $('#add_area_name').val(),
-                    // connection_id: {{data.id}},
+                    connection_id: {{data.id}},
                     area_memory: $('#add_area_area').val(),
                     db: parseInt($('#add_area_db').val()),
                     start: parseInt($('#add_area_start').val()),
                     size: parseInt($('#add_area_size').val())
                 }
-                // $.ajax({
-                //     url:"/value/add_area",
-                //     type:"POST",
-                //     data:JSON.stringify(data),
-                //     contentType:"application/json; charset=utf-8",
-                //     dataType:"json"
-                // }).done(function() {
-                //     console.log(1)
-                // });
+                $('#form-button').html('<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>')
+                $.post('/value/add_area', data).done(function (data, status) {
+
+                    // console.log(data, status)
+                    if (status == "success" && data.status == "success") {
+                        // console.log(data)
+                        $('#button-add-value').click()
+                        $('#change-hight').before(`
+                            <div id="window_area` + data.id + `" class="area_lable">
+                                <div class="lable_param">` + data.name + `</div>
+                                <div class="lable_param">` + data.area_memory + `</div>
+                                <div class="lable_param">` + data.db + `</div>
+                                <div class="lable_param">` + data.start + `</div>
+                                <div class="lable_param">` + data.size + `</div>
+                                <div class="change_area" id="change_area` + data.id + `"></div>
+                                <div class="delete_area" id="delete_area` + data.id + `"></div>
+                                <div class="variables_area" id="variables_area"` + data.id + `">Variables</div>
+                            </div>
+                        `)
+                        $('#window_area' + data.id).hide().show('normal')
+                        console.log("delete area where id=", data.id)
+                        $('#delete_area' + data.id).click(function () {
+                            $.ajax({
+                                url: "/value/delete_area/"+ data.id,
+                                method: "DELETE",
+                                success: function(data1) {
+                                    if (data.status == "success") {
+                                        $("#window_area"+data1.id).hide("slow", function () {
+                                            $(this).remove();
+                                        });
+                                    } else {
+                                        alert("bad request")
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        alert("bad request")
+                        $('#form-button').html('Save')
+                        // $('#button-add-value').click()
+                    }
+
+                });
             })
         }
-        function delete_form_pole(object_add, data_pole) {
+        function delete_form_pole() {
             $("#all-in-param").remove()
             $("#form-button").remove()
         }
 
         function add_all_area_to_window(all_area) {
             all_area.forEach(area => {
-                // console.log(area)
-                $('#window_param').append(`
-                <div id="window_area` + area.id + `" class="area_lable">
-                    <div class="lable_param">Name: ` + area.name + `</div>
-                    <div class="lable_param">Memory area: ` + area.area_memory + `</div>
-                    <div class="lable_param">DB: ` + area.db + `</div>
-                    <div class="lable_param">Start: ` + area.start + `</div>
-                    <div class="lable_param">Size: ` + area.size + `</div>
-                    <div id="change_area" value="` + area.id + `"></div>
-                    <div id="delete_area" value="` + area.id + `"></div>
-                    <div id="variables_area" value="` + area.id + `">Variables</div>
-                </div>
-                `)
+                $('#window_param').append(generateAreaHTML(area))
+                $('#delete_area' + area.id).click(function () {
+                    console.log("delete area where id=", area.id)
+                    $.ajax({
+                        url: "/value/delete_area/"+ area.id,
+                        method: "DELETE",
+                        success: function(data) {
+                            if (data.status == "success") {
+                                $("#window_area"+data.id).hide("slow", function () {
+                                    $(this).remove();
+                                });
+                            } else {
+                                alert("bad request")
+                            }
+                        }
+                    });
+                });
+                $('#change_area' + area.id).click(function () {
+                    $('#lable_param_name' + area.id).html('<input class="change_input" type="text" value="'+ area.name +'">')
+                    $('#lable_param_area_memory' + area.id).html('<input class="change_input" type="text" value="'+ area.area_memory +'">')
+                    $('#lable_param_db' + area.id).html('<input class="change_input" type="number" value="'+ area.db +'">')
+                    $('#lable_param_start' + area.id).html('<input class="change_input" type="number" value="'+ area.start +'">')
+                    $('#lable_param_size' + area.id).html('<input class="change_input" type="number" value="'+ area.size +'">')
+                    $('#change_area' + area.id).hide('slow')
+                    $('#delete_area' + area.id).hide('slow')
+                    $('#variables_area' + area.id).hide('slow')
+                    $('#window_area'+area.id).append(`
+                        <div id="save_change`+ area.id +`" class="change_button save_change">Save</div>
+                        <div id="cancel_change`+ area.id +`" class="change_button cancel_change">Cancel</div>
+                    `)
+                    $('#cancel_change'+area.id).click(function () {
+                        $('#lable_param_name' + area.id).html(area.name)
+                        $('#lable_param_area_memory' + area.id).html(area.area_memory)
+                        $('#lable_param_db' + area.id).html(area.db)
+                        $('#lable_param_start' + area.id).html(area.start)
+                        $('#lable_param_size' + area.id).html(area.size)
+                        $(this).hide('slow')
+                        $('#save_change'+area.id).hide('slow')
+                        $(this).remove()
+                        $('#save_change'+area.id).remove()
+                        $('#change_area' + area.id).show('slow')
+                        $('#delete_area' + area.id).show('slow')
+                        $('#variables_area' + area.id).show('slow')
+                        // $('#window_area'+area.id).append(`
+                        //     <div class="change_area" id="change_area` + area.id + `"></div>
+                        //     <div class="delete_area" id="delete_area` + area.id + `"></div>
+                        //     <div class="variables_area" id="variables_area` + area.id + `">Variables</div>
+                        // `)
+                    });
+                    
+                });
                 $('#window_area' + area.id).hide().show('normal')
-
             });
         }
 
+        function generateAreaHTML(area) {
+            let temp_string = `
+                <div id="window_area` + area.id + `" class="area_lable">
+                        <div class="lable_param" id="lable_param_name` + area.id + `">` + area.name + `</div>
+                        <div class="lable_param" id="lable_param_area_memory` + area.id + `">` + area.area_memory + `</div>
+                        <div class="lable_param" id="lable_param_db` + area.id + `">` + area.db + `</div>
+                        <div class="lable_param" id="lable_param_start` + area.id + `">` + area.start + `</div>
+                        <div class="lable_param" id="lable_param_size` + area.id + `">` + area.size + `</div>
+                        <div class="change_area" id="change_area` + area.id + `"></div>
+                        <div class="delete_area" id="delete_area` + area.id + `"></div>
+                        <div class="variables_area" id="variables_area` + area.id + `">Variables</div>
+                </div>
+            `
+            return temp_string
+        }
+
         $('#button-back').click(function () {
-            $('#window-html').hide('slow', function() {
+            $('#window-html').hide('slow', function () {
                 $(this).remove();
             });
         })

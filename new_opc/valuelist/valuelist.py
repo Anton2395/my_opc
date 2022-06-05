@@ -1,3 +1,4 @@
+from crypt import methods
 import time as _tm
 import json as _json
 
@@ -60,8 +61,10 @@ def add_new_area() -> str:
     }
     """
     try:
+        _tm.sleep(2)
         db = _models.Session()
-        data_post = request.json
+        data_post = request.values
+        
         new_area = _models.Area(
             name=data_post['name'],
             connection_id=data_post['connection_id'],
@@ -72,10 +75,20 @@ def add_new_area() -> str:
         )
         db.add(new_area)
         db.commit()
+        db.refresh(new_area)
+        response = {
+            "status": "success",
+            "name": new_area.name,
+            "area_memory": new_area.area_memory,
+            "db": new_area.db,
+            "start": new_area.start,
+            "size": new_area.size,
+            "id": new_area.id
+        }
         db.close()
-        return 'seccses'
+        return response
     except:
-        return 'error'
+        return {"status": "error"}
     
 
 
@@ -107,24 +120,26 @@ def update_area() -> str:
     except:
         return 'error'
 
-@app_value.route("/delete_area", methods=["DELETE"])
-def delete_area() -> str:
+@app_value.route("/delete_area/<id_area>", methods=["DELETE"])
+def delete_area(id_area:int) -> str:
     """
-    DELETE URI - http://<server>/value/delete_area
-    {
-        "area_id":<int>,
-    }
+    DELETE URI - http://<server>/value/delete_area/{id_area}
     """
     try:
-        data_psot = request.json
         db = _models.Session()
-        area = db.query(_models.Area).get(data_psot["area_id"])
+        area = db.query(_models.Area).get(id_area)
         db.delete(area)
         db.commit()
         db.close()
-        return 'seccses'
+        response = {
+            "status": "success",
+            "id": id_area
+        }
     except:
-        return 'error'
+        response = {
+            "status": "error"
+        }
+    return response
 
 @app_value.route('/add_value', methods=["POST"])
 def add_value() -> str:

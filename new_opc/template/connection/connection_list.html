@@ -70,9 +70,10 @@
                 change_to_form_and_back(this.id.substr(6))
             });
         };
-        if ($(this).text() == 'Area') {
-            id = this.id.substr(4)
+        if ($(this).text() == 'Area') {            
             $(this).click(function () {
+                id = this.id.substr(4)
+                console.log(this.id)
                 $.get("/value/"+id,function(data){
                     $("body").append(data)
                     // $('#name-connection-page-area').text($('#name'+id).text())
