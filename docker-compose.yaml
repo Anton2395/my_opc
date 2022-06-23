@@ -27,8 +27,6 @@ services:
     command:
       bash -c
       "
-      alembic revision --autogenerate &&
-      alembic upgrade head &&
       python app.py
       "
     depends_on:
@@ -36,10 +34,35 @@ services:
     volumes:
       - ./new_opc:/code
     ports:
-      - 8000:8000
+      - 8001:8001
     networks:
        mvlab_network:
         ipv4_address: 10.0.1.3
+  
+  fast:
+    container_name: fastapi_server
+    build: ./test_fastapi
+    environment:
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
+    command:
+      bash -c
+      "
+      alembic revision --autogenerate &&
+      alembic upgrade head &&
+      uvicorn app:app --host 0.0.0.0 --port 8000 --workers 2 --reload --debug
+      "
+            # python app.py
+
+    depends_on:
+      - postgres
+    volumes:
+      - ./test_fastapi:/code
+    ports:
+      - 8000:8000
+    networks:
+       mvlab_network:
+        ipv4_address: 10.0.1.4
 
 networks:
   mvlab_network:

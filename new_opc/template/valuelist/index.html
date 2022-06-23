@@ -5,15 +5,19 @@
     <div class="window" id="window_param">
         <div id="name-connections-area"><label id="name-connection-page-area">{{data.name}}</label></div>
         <div class="window cssload-loader"></div>
-        <div id="window_area` + area.id + `" class="area_lable head">
-            <div class="lable_param head">Name</div>
-            <div class="lable_param head">Memory area</div>
-            <div class="lable_param head">DB</div>
-            <div class="lable_param head">Start</div>
-            <div class="lable_param">Size</div>
-            <div class="no_visible_first"></div>
-            <div class="no_visible_first"></div>
-            <div class="no_visible_sec"></div>
+        <div class="area_lable head">
+            <div class="area-column">
+                <div class="lable_param head">Name</div>
+                <div class="lable_param head">Memory area</div>
+                <div class="lable_param head">DB</div>
+                <div class="lable_param head">Start</div>
+                <div class="lable_param">Size</div>
+            </div>
+            <div class="area-button">
+                <div class="no_visible_first"></div>
+                <div class="no_visible_first"></div>
+                <div class="no_visible_sec"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -168,9 +172,9 @@
                     $('#lable_param_db' + area.id).html('<input class="change_input" type="number" value="'+ area.db +'">')
                     $('#lable_param_start' + area.id).html('<input class="change_input" type="number" value="'+ area.start +'">')
                     $('#lable_param_size' + area.id).html('<input class="change_input" type="number" value="'+ area.size +'">')
-                    $('#change_area' + area.id).hide('slow')
-                    $('#delete_area' + area.id).hide('slow')
-                    $('#variables_area' + area.id).hide('slow')
+                    $('#change_area' + area.id).hide()
+                    $('#delete_area' + area.id).hide()
+                    $('#variables_area' + area.id).hide()
                     $('#window_area'+area.id).append(`
                         <div id="save_change`+ area.id +`" class="change_button save_change">Save</div>
                         <div id="cancel_change`+ area.id +`" class="change_button cancel_change">Cancel</div>
@@ -181,13 +185,13 @@
                         $('#lable_param_db' + area.id).html(area.db)
                         $('#lable_param_start' + area.id).html(area.start)
                         $('#lable_param_size' + area.id).html(area.size)
-                        $(this).hide('slow')
-                        $('#save_change'+area.id).hide('slow')
+                        // $(this).hide('slow')
+                        // $('#save_change'+area.id).hide('slow')
                         $(this).remove()
                         $('#save_change'+area.id).remove()
-                        $('#change_area' + area.id).show('slow')
-                        $('#delete_area' + area.id).show('slow')
-                        $('#variables_area' + area.id).show('slow')
+                        $('#change_area' + area.id).show()
+                        $('#delete_area' + area.id).show()
+                        $('#variables_area' + area.id).show()
                         // $('#window_area'+area.id).append(`
                         //     <div class="change_area" id="change_area` + area.id + `"></div>
                         //     <div class="delete_area" id="delete_area` + area.id + `"></div>

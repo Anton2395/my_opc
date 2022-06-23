@@ -1,0 +1,1 @@
+DATABASE_URL = "postgresql+psycopg2://mvlab:z1x2c3@10.0.1.2:5432/postgres"

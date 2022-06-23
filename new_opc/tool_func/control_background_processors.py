@@ -104,7 +104,8 @@ def stop_process(all_work_process: dict, name_stop_process: str) -> bool:
         while all_work_process[name_stop_process]["process"].is_alive():
             all_work_process[name_stop_process]["stop"].value = True
             _time.sleep(1)
-            return True
+        
+        return True
     except:
         return False
 
@@ -168,7 +169,7 @@ def start_flask(app_flask: object) -> bool:
     - **app_flask** : главный объект Flask
     """
     try:
-        app_flask.run(host='0.0.0.0', port=8000, debug=True, use_reloader=True)
+        app_flask.run(host='0.0.0.0', port=8001, debug=True, use_reloader=True)
         return True
     except Exception as e:
         print(e)

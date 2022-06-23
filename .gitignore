@@ -1,6 +1,9 @@
 
 **/__pycache__/
 new_opc/alembic/versions/
+test_fastAPI/alembic/versions/
+test_fastAPI/venv
+venv
 **/.DS_Store
 .DS_Store
 /__pycache__/

@@ -1,0 +1,27 @@
+Migraton command
+
+1. START
+
+
+"alembic init alembic"
+
+2. Change in alembic.ini linck on database:
+"
+...
+sqlalchemy.url = mysql+mysqldb://root:root@localhost:3306/database_name
+...
+"
+
+3. change alembic/env.py ->
+"
+...
+from DataBase.models import base
+target_metadata = [base.metadata]
+...
+"
+
+4. Create commit migration
+"alembic revision --autogenerate -m “First commit”"
+
+5. Migrate last commit
+"alembic upgrade head"
